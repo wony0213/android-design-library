@@ -16,6 +16,8 @@
 
 package com.example.android.materialdesigncodelab;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -32,6 +34,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,6 +47,8 @@ import java.util.List;
  * Provides UI for the main screen.
  */
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "MainActivity";
 
     private DrawerLayout mDrawerLayout;
 
@@ -82,6 +87,13 @@ public class MainActivity extends AppCompatActivity {
                         menuItem.setChecked(true);
 
                         // TODO: handle navigation
+
+                        if (menuItem.getItemId() == R.id.choose_location) {
+                            Log.e(TAG, "选择位置菜单被点击");
+                            Context context = MainActivity.this;
+                            Intent intent = new Intent(context, ChooseLocationActivity.class);
+                            context.startActivity(intent);
+                        }
 
                         // Closing drawer on item click
                         mDrawerLayout.closeDrawers();

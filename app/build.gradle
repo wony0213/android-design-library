@@ -15,6 +15,7 @@
  */
 
 apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao' // for greenDAO
 
 android {
     compileSdkVersion 26
@@ -22,7 +23,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.android.materialdesigncodelab"
-        minSdkVersion 15
+        minSdkVersion 17
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -50,4 +51,14 @@ dependencies {
 
 dependencies {
     compile 'pub.devrel:easypermissions:0.4.2'
+}
+
+dependencies {
+    implementation 'com.android.support.constraint:constraint-layout:+'
+}
+dependencies {
+    implementation 'com.android.support.constraint:constraint-layout:+'
+}
+dependencies {
+    compile 'org.greenrobot:greendao:3.2.2' // for greenDAO
 }

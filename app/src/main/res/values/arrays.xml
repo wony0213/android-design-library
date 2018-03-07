@@ -108,4 +108,14 @@
         <item>@drawable/e</item>
         <item>@drawable/f</item>
     </array>
+
+
+
+    <string-array name="location_array">
+        <item>@string/china</item>
+        <item>@string/united_states</item>
+        <item>@string/japan</item>
+        <item>@string/korean</item>
+        <item>@string/france</item>
+    </string-array>
 </resources>

@@ -16,9 +16,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/choose_location"
             android:icon="@drawable/ic_home_black_24dp"
             android:tint="@color/button_grey"
-            android:title="One" />
+            android:title="@string/choose_location" />
         <item
             android:icon="@drawable/ic_favorite_black_24dp"
             android:tint="@color/button_grey"

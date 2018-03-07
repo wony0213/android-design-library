@@ -12,6 +12,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.android.materialdesigncodelab.model.DaoSession;
+import com.example.android.materialdesigncodelab.model.OrganizationInfo;
+import com.example.android.materialdesigncodelab.model.OrganizationInfoDao;
+
+import java.util.List;
+
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -29,10 +35,20 @@ public class TestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
+        // get the note DAO
+        DaoSession daoSession = ((ChildHelplineApp)getApplication()).getDaoSession();
+        final OrganizationInfoDao organizationInfoDao = daoSession.getOrganizationInfoDao();
+
         findViewById(R.id.button_call).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TestActivityPermissionsDispatcher.callNumberWithPermissionCheck(TestActivity.this);
+//                TestActivityPermissionsDispatcher.callNumberWithPermissionCheck(TestActivity.this);
+
+                List<OrganizationInfo> list = organizationInfoDao.queryBuilder()
+                        .where(OrganizationInfoDao.Properties.CountryName.eq("China")).build().list();
+                for (int i = 0; i < list.size(); i++) {
+                    Log.e("Test", list.get(i).getCountryName() + list.get(i).getOrganizationName() + list.get(i).getPhoneNumber());
+                }
             }
         });
     }
