@@ -30,12 +30,12 @@
     <string name="detail_location">"8 Rue Scribe, 75009 Paris, France"</string>
 
 
-    <string name="choose_location">"选择位置"</string>
+    <string name="choose_location">Choose Location</string>
     <string name="china">China</string>
     <string name="united_states">United States</string>
-    <string name="japan">日本</string>
-    <string name="korean">韩国</string>
-    <string name="france">法国</string>
+    <string name="japan">Japan</string>
+    <string name="korean">Korean</string>
+    <string name="france">France</string>
 
 
     <string name="current_location">Current Location</string>

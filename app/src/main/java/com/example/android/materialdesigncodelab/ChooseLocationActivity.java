@@ -41,8 +41,8 @@ public class ChooseLocationActivity extends AppCompatActivity {
         mAllCountyrsGridView = (GridView) findViewById(R.id.grid_all_countrys);
         mEmptyView = (TextView) findViewById(R.id.empty_view);
 
-        mCurrentLocationAdapter = new ArrayAdapter<String>(ChooseLocationActivity.this, R.layout.item_gridview, R.id.text_country_name, getResources().getStringArray(R.array.location_array));
-        mAllCountyrsGridView.setAdapter(mCurrentLocationAdapter);
+        mAllCountrysAdapter = new ArrayAdapter<String>(ChooseLocationActivity.this, R.layout.item_gridview, R.id.text_country_name, getResources().getStringArray(R.array.location_array));
+        mAllCountyrsGridView.setAdapter(mAllCountrysAdapter);
 
         mAllCountyrsGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -86,7 +86,7 @@ public class ChooseLocationActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                mCurrentLocationAdapter.getFilter().filter(newText);
+                mAllCountrysAdapter.getFilter().filter(newText);
                 return true;
             }
         });
