@@ -2,10 +2,13 @@ package com.example.android.materialdesigncodelab;
 
 import android.app.Application;
 
+import com.example.android.materialdesigncodelab.config.ChildHelplineConfig;
 import com.example.android.materialdesigncodelab.model.DaoMaster;
 import com.example.android.materialdesigncodelab.model.DaoSession;
 import com.example.android.materialdesigncodelab.model.OrganizationInfo;
 import com.example.android.materialdesigncodelab.model.OrganizationInfoDao;
+import com.example.android.materialdesigncodelab.model.UserConfig;
+import com.example.android.materialdesigncodelab.model.UserConfigDao;
 
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.internal.DaoConfig;
@@ -31,18 +34,26 @@ public class ChildHelplineApp extends Application {
         Database db = ENCRYPTED ? helper.getEncryptedWritableDb("super-secret") : helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
 
-//        initDataset(daoSession);
+        initDataset(daoSession);
     }
 
     private void initDataset(DaoSession daoSession) {
+        // 初始化UserConfig表,以及OrganizationInfo表
+        UserConfigDao userConfigDao = daoSession.getUserConfigDao();
         OrganizationInfoDao organizationInfoDao = daoSession.getOrganizationInfoDao();
+        if(userConfigDao.queryBuilder().where(UserConfigDao.Properties.UserName.eq(ChildHelplineConfig.DEFAULT_USER_NAME)).build().list().size() == 0) {
+            // UserConfig表初始化
+            UserConfig userConfig = new UserConfig(null, ChildHelplineConfig.DEFAULT_USER_NAME, getResources().getString(R.string.china), "English");
+            userConfigDao.insert(userConfig);
 
-        OrganizationInfo organizationInfo1 = new OrganizationInfo(null, "China", "移动", "中国移动", "10086", false);
-        organizationInfoDao.insert(organizationInfo1);
-        OrganizationInfo organizationInfo2 = new OrganizationInfo(null, "China", "联通", "中国联通", "10010", true);
-        organizationInfoDao.insert(organizationInfo2);
-        OrganizationInfo organizationInfo3 = new OrganizationInfo(null, "United States", "警察", "美国警察机构", "119", false);
-        organizationInfoDao.insert(organizationInfo3);
+            // OrganizationInfo表初始化
+            OrganizationInfo organizationInfo1 = new OrganizationInfo(null, "China", "移动", "中国移动", "10086", false);
+            organizationInfoDao.insert(organizationInfo1);
+            OrganizationInfo organizationInfo2 = new OrganizationInfo(null, "China", "联通", "中国联通", "10010", true);
+            organizationInfoDao.insert(organizationInfo2);
+            OrganizationInfo organizationInfo3 = new OrganizationInfo(null, "United States", "警察", "美国警察机构", "119", false);
+            organizationInfoDao.insert(organizationInfo3);
+        }
     }
 
     public DaoSession getDaoSession() {

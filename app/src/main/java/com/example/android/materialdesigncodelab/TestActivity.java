@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.example.android.materialdesigncodelab.model.DaoSession;
 import com.example.android.materialdesigncodelab.model.OrganizationInfo;
 import com.example.android.materialdesigncodelab.model.OrganizationInfoDao;
+import com.example.android.materialdesigncodelab.model.UserConfig;
+import com.example.android.materialdesigncodelab.model.UserConfigDao;
 
 import java.util.List;
 
@@ -38,17 +40,21 @@ public class TestActivity extends AppCompatActivity {
         // get the note DAO
         DaoSession daoSession = ((ChildHelplineApp)getApplication()).getDaoSession();
         final OrganizationInfoDao organizationInfoDao = daoSession.getOrganizationInfoDao();
+        final UserConfigDao userConfigDao = daoSession.getUserConfigDao();
 
         findViewById(R.id.button_call).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                TestActivityPermissionsDispatcher.callNumberWithPermissionCheck(TestActivity.this);
 
-                List<OrganizationInfo> list = organizationInfoDao.queryBuilder()
-                        .where(OrganizationInfoDao.Properties.CountryName.eq("China")).build().list();
-                for (int i = 0; i < list.size(); i++) {
-                    Log.e("Test", list.get(i).getCountryName() + list.get(i).getOrganizationName() + list.get(i).getPhoneNumber());
-                }
+//                List<OrganizationInfo> list = organizationInfoDao.queryBuilder()
+//                        .where(OrganizationInfoDao.Properties.CountryName.eq("China")).build().list();
+//                for (int i = 0; i < list.size(); i++) {
+//                    Log.e("Test", list.get(i).getCountryName() + list.get(i).getOrganizationName() + list.get(i).getPhoneNumber());
+//                }
+
+                List<UserConfig> userConfigList = userConfigDao.queryBuilder().where(UserConfigDao.Properties.UserName.eq("default")).build().list();
+                Log.e("Test", userConfigList.get(0).getUserName() + userConfigList.get(0).getCurrentLocation() + userConfigList.get(0).getLanguage());
             }
         });
     }

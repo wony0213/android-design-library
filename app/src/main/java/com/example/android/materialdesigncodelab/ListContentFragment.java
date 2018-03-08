@@ -27,6 +27,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -40,6 +41,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.materialdesigncodelab.database.OrganizationInfoUtil;
+import com.example.android.materialdesigncodelab.database.UserConfigUtil;
+import com.example.android.materialdesigncodelab.model.OrganizationInfo;
+import com.example.android.materialdesigncodelab.model.UserConfig;
 import com.example.android.materialdesigncodelab.util.PhoneUtil;
 
 import java.util.List;
@@ -57,13 +62,29 @@ import permissions.dispatcher.RuntimePermissions;
 @RuntimePermissions
 public class ListContentFragment extends Fragment {
 
+    private static final String TAG = "ListContentFragment";
+
+    private List<OrganizationInfo> mOrganizationInfoList;
+    private ContentAdapter mAdapter;
+
+    private String currentLocation;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Log.e(TAG, "onCreate()");
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.e(TAG, "onCreateView()");
         RecyclerView recyclerView = (RecyclerView) inflater.inflate(
                 R.layout.recycler_view, container, false);
-        ContentAdapter adapter = new ContentAdapter(recyclerView.getContext());
-        recyclerView.setAdapter(adapter);
+        initData();
+        mAdapter = new ContentAdapter(recyclerView.getContext(), mOrganizationInfoList);
+        recyclerView.setAdapter(mAdapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -81,7 +102,7 @@ public class ListContentFragment extends Fragment {
 //        });
 
         //设置拨号监听
-        adapter.setOnDialButtonClickListener(new ContentAdapter.OnDialButtonClickListener() {
+        mAdapter.setOnDialButtonClickListener(new ContentAdapter.OnDialButtonClickListener() {
             @Override
             public void dial(View view, int postion, String phoneNumber) {
                 ListContentFragmentPermissionsDispatcher.callNumberWithPermissionCheck(ListContentFragment.this, phoneNumber);
@@ -91,6 +112,24 @@ public class ListContentFragment extends Fragment {
         return recyclerView;
     }
 
+    private void initData() {
+        // 初始化数据
+        currentLocation = UserConfigUtil.getCurrentLocation(getContext());
+        mOrganizationInfoList = OrganizationInfoUtil.getOrganizationInfos(getContext(), currentLocation);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.e(TAG, "onStart()");
+
+        String newLocation = UserConfigUtil.getCurrentLocation(getContext());
+        if (!currentLocation.equals(newLocation)) {
+            mOrganizationInfoList = OrganizationInfoUtil.getOrganizationInfos(getContext(), currentLocation);
+            mAdapter.updateDataAndView(mOrganizationInfoList);
+        }
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         //        public ImageView avator;
         public TextView name;
@@ -98,7 +137,6 @@ public class ListContentFragment extends Fragment {
 
         public ViewHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.item_list, parent, false));
-//            avator = (ImageView) itemView.findViewById(R.id.list_avatar);
             name = (TextView) itemView.findViewById(R.id.list_title);
             description = (TextView) itemView.findViewById(R.id.list_desc);
 //            itemView.setOnClickListener(new View.OnClickListener() {
@@ -117,12 +155,11 @@ public class ListContentFragment extends Fragment {
      * Adapter to display recycler view.
      */
     public static class ContentAdapter extends RecyclerView.Adapter<ViewHolder> {
+
+        private List<OrganizationInfo> mOrganizationInfos;
+
         // Set numbers of List in RecyclerView.
         private static final int LENGTH = 18;
-
-        private final String[] mPlaces;
-        private final String[] mPlaceDesc;
-//        private final Drawable[] mPlaceAvators;
 
         private ContentAdapter.OnItemClickListener onItemClickListener;
         private ContentAdapter.OnDialButtonClickListener onDialButtonClickListener;
@@ -140,16 +177,13 @@ public class ListContentFragment extends Fragment {
             this.onDialButtonClickListener = dialListener;
         }
 
-        public ContentAdapter(Context context) {
-            Resources resources = context.getResources();
-            mPlaces = resources.getStringArray(R.array.places);
-            mPlaceDesc = resources.getStringArray(R.array.place_desc);
-//            TypedArray a = resources.obtainTypedArray(R.array.place_avator);
-//            mPlaceAvators = new Drawable[a.length()];
-//            for (int i = 0; i < mPlaceAvators.length; i++) {
-//                mPlaceAvators[i] = a.getDrawable(i);
-//            }
-//            a.recycle();
+        public ContentAdapter(Context context, List<OrganizationInfo> organizationInfos) {
+            this.mOrganizationInfos = organizationInfos;
+        }
+
+        public void updateDataAndView(List<OrganizationInfo> organizationInfos) {
+            this.mOrganizationInfos = organizationInfos;
+            this.notifyDataSetChanged();
         }
 
         @Override
@@ -159,9 +193,8 @@ public class ListContentFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
-//            holder.avator.setImageDrawable(mPlaceAvators[position % mPlaceAvators.length]);
-            holder.name.setText(mPlaces[position % mPlaces.length]);
-            holder.description.setText(mPlaceDesc[position % mPlaceDesc.length]);
+            holder.name.setText(mOrganizationInfos.get(position).getOrganizationName());
+            holder.description.setText(mOrganizationInfos.get(position).getOrganizationDes());
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -180,7 +213,7 @@ public class ListContentFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return LENGTH;
+            return mOrganizationInfos.size();
         }
 
         public interface OnItemClickListener {
