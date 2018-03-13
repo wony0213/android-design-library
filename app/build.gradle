@@ -62,3 +62,12 @@ dependencies {
 dependencies {
     compile 'org.greenrobot:greendao:3.2.2' // for greenDAO
 }
+
+dependencies{
+    compile 'com.youth.banner:banner:1.4.10'  //for banner
+}
+
+dependencies {
+    implementation 'com.github.bumptech.glide:glide:4.3.1' // for banner，如果用4.6.1的话跟26版本不兼容，会报错
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.3.1'
+}

@@ -21,9 +21,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -37,16 +34,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.android.materialdesigncodelab.database.OrganizationInfoUtil;
 import com.example.android.materialdesigncodelab.database.UserConfigUtil;
 import com.example.android.materialdesigncodelab.model.OrganizationInfo;
-import com.example.android.materialdesigncodelab.model.UserConfig;
 import com.example.android.materialdesigncodelab.util.PhoneUtil;
+import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
+import com.youth.banner.Transformer;
+import com.youth.banner.loader.ImageLoader;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import permissions.dispatcher.NeedsPermission;
@@ -80,8 +81,8 @@ public class ListContentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.e(TAG, "onCreateView()");
-        RecyclerView recyclerView = (RecyclerView) inflater.inflate(
-                R.layout.recycler_view, container, false);
+        View view = inflater.inflate(R.layout.fragment_list_content, container, false);
+        RecyclerView recyclerView = view.findViewById(R.id.my_recycler_view);
         initData();
         mAdapter = new ContentAdapter(recyclerView.getContext(), mOrganizationInfoList);
         recyclerView.setAdapter(mAdapter);
@@ -109,13 +110,50 @@ public class ListContentFragment extends Fragment {
             }
         });
 
-        return recyclerView;
+        //Banner设置
+        Banner banner = (Banner) view.findViewById(R.id.my_banner);
+        List<Integer> imageResList = new ArrayList<>();
+        imageResList.add(R.drawable.a);
+        imageResList.add(R.drawable.b);
+        imageResList.add(R.drawable.c);
+        List<String> imageTitleList =  new ArrayList<>();
+        imageTitleList.add("a");
+        imageTitleList.add("b");
+        imageTitleList.add("c");
+
+        //设置内置样式，共有六种可以点入方法内逐一体验使用。
+        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
+        //设置图片加载器，图片加载器在下方
+        banner.setImageLoader(new MyGlideImageLoader());
+        //设置图片网址或地址的集合
+        banner.setImages(imageResList);
+        //设置轮播的动画效果，内含多种特效，可点入方法内查找后内逐一体验
+        banner.setBannerAnimation(Transformer.Default);
+        //设置轮播图的标题集合
+        banner.setBannerTitles(imageTitleList);
+        //设置轮播间隔时间
+        banner.setDelayTime(3000);
+        //设置是否为自动轮播，默认是“是”。
+        banner.isAutoPlay(true);
+        //设置指示器的位置，小点点，左中右。
+        banner.setIndicatorGravity(BannerConfig.CENTER);
+        //启动
+        banner.start();
+
+        return view;
     }
 
     private void initData() {
         // 初始化数据
         currentLocation = UserConfigUtil.getCurrentLocation(getContext());
         mOrganizationInfoList = OrganizationInfoUtil.getOrganizationInfos(getContext(), currentLocation);
+    }
+
+    private class MyGlideImageLoader extends ImageLoader {
+        @Override
+        public void displayImage(Context context, Object path, ImageView imageView) {
+            Glide.with(context).load(path).into(imageView);
+        }
     }
 
     @Override
@@ -125,6 +163,7 @@ public class ListContentFragment extends Fragment {
 
         String newLocation = UserConfigUtil.getCurrentLocation(getContext());
         if (!currentLocation.equals(newLocation)) {
+            currentLocation = newLocation;
             mOrganizationInfoList = OrganizationInfoUtil.getOrganizationInfos(getContext(), currentLocation);
             mAdapter.updateDataAndView(mOrganizationInfoList);
         }
