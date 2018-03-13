@@ -47,12 +47,38 @@ public class ChildHelplineApp extends Application {
             userConfigDao.insert(userConfig);
 
             // OrganizationInfo表初始化
-            OrganizationInfo organizationInfo1 = new OrganizationInfo(null, "China", "移动", "中国移动", "10086", false);
-            organizationInfoDao.insert(organizationInfo1);
-            OrganizationInfo organizationInfo2 = new OrganizationInfo(null, "China", "联通", "中国联通", "10010", true);
-            organizationInfoDao.insert(organizationInfo2);
-            OrganizationInfo organizationInfo3 = new OrganizationInfo(null, "United States", "警察", "美国警察机构", "119", false);
-            organizationInfoDao.insert(organizationInfo3);
+            OrganizationInfo organizationInfo = new OrganizationInfo(null, "China", "移动", "中国移动", "10086", false);
+            organizationInfoDao.insert(organizationInfo);
+            organizationInfo = new OrganizationInfo(null, "China", "联通", "中国联通", "10010", true);
+            organizationInfoDao.insert(organizationInfo);
+
+
+            organizationInfo = new OrganizationInfo(null, "United States", "2nd Floor", "for New Jersey's youth", "10086", false);
+            organizationInfoDao.insert(organizationInfo);
+            organizationInfo = new OrganizationInfo(null, "United States", "Boys Town National Hotline", "Boys Town National Hotline", "10086", false);
+            organizationInfoDao.insert(organizationInfo);
+            organizationInfo = new OrganizationInfo(null, "United States", "California Youth Crisis Line", "for California‘s youth", "10086", false);
+            organizationInfoDao.insert(organizationInfo);
+            organizationInfo = new OrganizationInfo(null, "United States", "Child Abuse Hotline", "precention and treatment of child abuse", "10086", false);
+            organizationInfoDao.insert(organizationInfo);
+            organizationInfo = new OrganizationInfo(null, "United States", "Crisis Text Line", "any type of crisis", "10086", false);
+            organizationInfoDao.insert(organizationInfo);
+            organizationInfo = new OrganizationInfo(null, "United States", "Muslim American Youth Supportline - MAYS", "Muslim American Youth Supportline", "10086", false);
+            organizationInfoDao.insert(organizationInfo);
+            organizationInfo = new OrganizationInfo(null, "United States", "National Runaway Safeline", "Runaway helpline", "10086", false);
+            organizationInfoDao.insert(organizationInfo);
+            organizationInfo = new OrganizationInfo(null, "United States", "Polaris", "Human Trafficking", "10086", false);
+            organizationInfoDao.insert(organizationInfo);
+            organizationInfo = new OrganizationInfo(null, "United States", "Stop It Now!", "sexual abuse", "10086", false);
+            organizationInfoDao.insert(organizationInfo);
+
+            organizationInfo = new OrganizationInfo(null, "Poland", "Poland", "Poland", "10086", false);
+            organizationInfoDao.insert(organizationInfo);
+            organizationInfo = new OrganizationInfo(null, "Luxembourg", "Luxembourg", "Luxembourg", "10086", false);
+            organizationInfoDao.insert(organizationInfo);
+
+
+
         }
     }
 

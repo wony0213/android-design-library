@@ -112,8 +112,10 @@
 
 
     <string-array name="location_array">
-        <item>@string/china</item>
         <item>@string/united_states</item>
+        <item>@string/poland</item>
+        <item>@string/luxembourg</item>
+        <item>@string/china</item>
         <item>@string/japan</item>
         <item>@string/korean</item>
         <item>@string/france</item>

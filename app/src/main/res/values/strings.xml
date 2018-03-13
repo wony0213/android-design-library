@@ -36,6 +36,8 @@
     <string name="japan">Japan</string>
     <string name="korean">Korean</string>
     <string name="france">France</string>
+    <string name="poland">Poland</string>
+    <string name="luxembourg">Luxembourg</string>
 
 
     <string name="current_location">Current Location</string>
